@@ -1,0 +1,21 @@
+{
+    "mirrorlist": {
+        "count": 1,
+        "targets": [{
+            "cname": "centos",
+            "url": "https://mirrors.cqu.edu.cn/centos",
+            "synced_at": "0000-00-00 00:00:00",
+            "status":  300,
+            "has_comment": true,
+            "comment": "new",
+            "has_help": true,
+            "help_url": "https://mirrors.cqu.edu.cn/wiki/centos/"
+        }]
+    },
+    "notice": {
+        "count": 1,
+        "targets": [{
+            "notice": "Hello world!"
+        }]
+    }
+}

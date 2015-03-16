@@ -1,0 +1,156 @@
+﻿@media screen and (max-width: 768px) {
+    .cqum-header {
+        height: 132px !important;
+        
+    }
+
+    .cqum-header .container {
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+    }
+    .cqum-header h1 {
+        font-size: 28px;
+
+    }
+
+    .cqum-header p {
+        font-size: 16px !important;
+    }
+
+    .cqum-container .row .btn-group {
+        margin-bottom: 10px;
+    }
+}
+
+body {
+    font-family:'Helvetica Neue', Helvetica, Arial, DengXian;
+}
+
+.btn-group button {
+    overflow: hidden;
+}
+.new-notice {
+    width: auto;
+    height: auto;
+    padding: 15px;
+    background: #F5F5F5;
+    border: 1px solid #F5F5F5;
+    border-radius: 6px;
+    margin-top: 45px;
+    display: none;
+}
+
+.cqum-nav {
+    margin-bottom: 0 !important;
+    border-bottom: 0;
+}
+
+.navbar-toggle {
+    background: #f9f9f9;
+}
+.icon-bar {
+    background: #337ab7;
+}
+
+.cqum-header {
+    height: auto;
+    background: #337ab7;
+}
+
+.cqum-header {
+    color: #fff;
+    height: 200px;
+}
+.cqum-header p {
+    font-size: 30px;
+    /*color: #7DB9DE;*/
+}
+.cqum-header .container {
+    padding-top: 39px;
+}
+
+.cqum-section .page-header {
+    font-size: 24px;
+}
+.cqum-section .lead {
+    font-size: 16px;
+}
+
+table thead {
+    font-weight: bold;
+}
+.cqum-table-container {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px 20px 0 20px;
+}
+td .label-statu {
+    display: block;
+    width: 58px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    padding: 0;
+}
+td a {
+    float: left;
+}
+td .label-new {
+    font-size: 8px;
+    margin-left: 5px;
+    /*display: inline-block;*/
+    float: left;
+}
+.help-icon {
+    color: #333333;
+    margin-left: 5px;
+}
+
+.sub-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.cqum-sidebar {
+    /*position: fixed;*/
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.cqum-sidenav li {
+    height: 30px;
+    
+}
+.cqum-sidenav li:hover {
+    background: none;
+}
+.cqum-sidenav a {
+    float: left;
+    color: #767676;
+    margin: 5px 0;
+    padding: 0 15px 0 15px !important;
+    border-left: 1px solid #fff;
+}
+.cqum-sidenav a:hover {
+    color: #337ab7;
+    background: #fff !important;
+}
+
+.nav-quick-get {
+    color: #337ab7;
+    border-left: 1px solid #337ab7;
+    /*font-weight: bold;*/
+}
+
+.cqum-footer {
+    margin-top: 70px;
+    background: #F5F5F5;
+}
+
+.cqum-footer .container {
+    padding: 35px 15px;
+}
+
+.cqum-footer .container p {
+    margin: 0;
+}
