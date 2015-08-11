@@ -19,13 +19,12 @@ Chongqing University Open Source Mirror Site
 - 发行版版本
 
 ##源列表
-- Name(镜像帮助,新增镜像标记)
-- Last update(yyyy-MM-dd HH:mm:ss, Ex. 2015-02-16 01:58:00)
-- Status(Success | Unknown | Syncing)
+- Name (镜像帮助,新增镜像标记)
+- Last update (yyyy-MM-dd HH:mm:ss, Ex. 2015-02-16 01:58:00)
+- Status (Success | Unknown | Syncing)
 
 ##关于此镜像站
-重庆大学开源镜像站由重庆大学蓝萌维护管理.目前收录了 CentOS | Arch | openSUSE | Ubuntu | Raspbian 等多个发行版的镜像.依托重庆大学
-网络面向全国提供镜像源服务.其中部分服务器由重庆大学 IBM Power Systems 教育中心提供.
+重庆大学开源镜像站由重庆大学蓝萌维护管理.目前收录了 CentOS | Arch | openSUSE | Ubuntu | Raspbian 等多个发行版的镜像.依托重庆大学网络面向全国提供镜像源服务.其中部分服务器由重庆大学 IBM Power Systems 教育中心提供.
 
 ###镜像站说明
 1. 本镜像支持 IPv4 访问
