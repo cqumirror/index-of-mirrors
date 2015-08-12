@@ -14,7 +14,8 @@ CQU Mirror Site back-end
 }
 ```
 
-参数说明
+参数说明:
+
 |参数|意义|备注|
 |----|----|----|
 |count|对象个数||
@@ -41,6 +42,7 @@ GET    /api/mirrors/list
 ```
 
 参数说明:
+
 |参数|意义|备注|
 |----|----|----|
 |id||应仅包含 [a-z] 和 \_|
@@ -52,7 +54,8 @@ GET    /api/mirrors/list
 |status|镜像更新状态|具体代码含义参加下表|
 |errmsg|根据 status 给出相应信息, 没有则为空||
 
-`status` 状态说明
+`status` 状态说明:
+
 |状态码|含义|备注|
 |100|Syncing|正在更新|
 |200|Success|更新成功|

@@ -3,3 +3,6 @@
 
 # Ignore virtualenv
 env/
+
+# Mac sys files
+.DS_Store
