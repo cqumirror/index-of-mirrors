@@ -2,6 +2,17 @@
     font-family:'Helvetica Neue', Helvetica, Arial, DengXian;
 }
 
+.new-notice {
+    width: auto;
+    height: auto;
+    padding: 15px;
+    background: #F5F5F5;
+    border: 1px solid #F5F5F5;
+    border-radius: 6px;
+    margin-top: 45px;
+    display: none;
+}
+
 .cqum-nav {
     margin-bottom: 0 !important;
     border-bottom: 0;
@@ -101,6 +112,7 @@ td .label-new {
 .nav-quick-get {
     color: #337ab7;
     border-left: 1px solid #337ab7;
+    /*font-weight: bold;*/
 }
 
 .cqum-footer {

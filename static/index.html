@@ -52,10 +52,14 @@
   <div class="container cqum-container">
     <div class="row">
       <div class="col-md-9" role="main">
+        <div class="new-notice">
+          <p><b>最新公告</b></p>
+          <p class="notice-detail"></p>
+        </div>
         <div class="cqum-section">
           <h1 id="quick-get" class="page-header"><a class="anchorjs-link " href="#quick-get" aria-label="Anchor link for: quick-get" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>快速获取</h1>
 
-          <p class="lead">这里为您提供各大主流 Linux 发行版的安装镜像 / ISO 文件以及常用的免费软件，请根据您的需求进行选择：</p>
+          <p class="lead">这里为您提供各大主流 Linux 发行版本的安装镜像以及常用的免费软件，请根据您的需求进行选择：</p>
 
           <div class="row">
             <div class="btn-group col-sm-3">
@@ -124,11 +128,11 @@
               <thead>
                 <tr>
                   <td class="col-xs-5">Name</td>
-                  <td class="col-xs-5">Lasted update</td>
+                  <td class="col-xs-5">Last update</td>
                   <td class="col-xs-2">statu</td>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="the-list">
                 <tr>
                   <td>
                     <a href="javascript:;">archlinux</a>
@@ -255,7 +259,7 @@
         <div class="cqum-section">
           <h1 id="about" class="page-header"><a class="anchorjs-link " href="#about" aria-label="Anchor link for: about" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>关于此镜像站</h1>
 
-          <p class="lead">重庆大学开源镜像站由重庆大学蓝盟维护管理。目前收录了CentOS、Archlinux、CentOS、Ubuntu等多个发行版的镜像。依托重庆大学网络面向全国提供优质的镜像源服务。</p>
+          <p class="lead">重庆大学开源镜像站由重庆大学蓝萌维护管理，目前收录了 CentOS | Arch | openSUSE | Ubuntu | Raspbian 等多个发行版的镜像。依托重庆大学网络面向全国提供镜像源服务。其中部分服务器由重庆大学 IBM Power Systems 教育中心提供。</p>
 
           <h2 class="sub-title">镜像源说明</h2>
 
@@ -271,7 +275,7 @@
             <b>请勿使用多线程下载工具。</b>公共资源，带宽有限，请使用浏览器自带下载工具下载安装包，谢谢！ Why? Public sources, bandwith Limited. Use default download tools only, Please.
           </p>
         </div>
-        <div class="cqum-section">
+        <!--<div class="cqum-section">
           <h1 id="contact-us" class="page-header"><a class="anchorjs-link " href="#contact-us" aria-label="Anchor link for: contact-us" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>联系我们</h1>
 
           <p class="lead">如果您有任何问题或建议，通过以下方式联系我们：</p>
@@ -280,7 +284,7 @@
             如果您有任何问题或建议，请发送邮件到 <a>issues+mirrors@tuna.tsinghua.edu.cn</a>， 或前往 <a>https://issues.tuna.tsinghua.edu.cn/?queue=mirrors</a> 反馈。
           </p>
 
-        </div>
+        </div>-->
       </div>
       <div class="col-md-3" role="complementary">
         <nav class="cqum-sidebar hidden-print hidden-xs hidden-sm affix-top">
@@ -305,11 +309,17 @@
 
   <footer class="cqum-footer">
     <div class="container">
+      <h5 id="contact-us"><b>联系我们</b></h5>
+      <p>
+        <a href="mirrors@cqu.edu.cn">Mailing</a><br />
+        <a href="https://github.com/cquos">Github</a><br />
+        <a href="http://mirrors.cqu.edu.cn/webin/report.php">Issue report</a><br />
+      </p>
+      <h5><b>其他</b></h5>
       <p>
         CopyLeft 2014-2015 重庆大学蓝盟Maintenance Team<br />
         由重庆大学网络与信息管理中心提供网络接入<br />
         由重庆大学IBM Power Systems教育中心提供硬件支持<br />
-        Issue report or questions are welcomed. Send a report 联系管理员<br />
       </p>
     </div>
   </footer>
@@ -319,8 +329,26 @@
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/bootstrap.min.js"></script>
 
+  <script src="js/ajax.js"></script>
+
   <!-- change the style -->
   <script>
+
+    var quickGetTop = $('#quick-get').offset().top;
+    var sourceListTop = $('#source-list').offset().top;
+    var aboutTop = $('#about').offset().top;
+    var pageHight = $(document).height() - $(window).height();
+    console.log(quickGetTop);
+    console.log(sourceListTop);
+    console.log(aboutTop);
+    console.log(pageHight);
+
+    $('.nav-quick-get').css({
+      color: '#337ab7',
+      borderLeft: '1px solid #337ab7',
+      fontWeight: 'bold'
+    });
+
     $(window.document).scroll(function () {
       var scrolltop = $(document).scrollTop();
       console.log(scrolltop);
@@ -338,44 +366,52 @@
       }
 
       // style for the NAV
-      if (scrolltop >= 0 && scrolltop < 462) {
+      if (scrolltop >= 0 && scrolltop < sourceListTop) {
         $('.cqum-sidenav a').css({
           color: '#767676',
-          borderLeft: '1px solid #fff'
+          borderLeft: '1px solid #fff',
+          fontWeight: 'normal'
         });
         $('.nav-quick-get').css({
           color: '#337ab7',
-          borderLeft: '1px solid #337ab7'
+          borderLeft: '1px solid #337ab7',
+          fontWeight: 'bold'
         });
       }
-      else if (scrolltop >= 462 && scrolltop < 840) {
+      else if (scrolltop >= sourceListTop && scrolltop < aboutTop) {
         $('.cqum-sidenav a').css({
           color: '#767676',
-          borderLeft: '1px solid #fff'
+          borderLeft: '1px solid #fff',
+          fontWeight: 'normal'
         });
         $('.nav-source-list').css({
           color: '#337ab7',
-          borderLeft: '1px solid #337ab7'
+          borderLeft: '1px solid #337ab7',
+          fontWeight: 'bold'
         });
       }
-      else if (scrolltop >= 462 && scrolltop < 1160) {
+      else if (scrolltop >= aboutTop && scrolltop < pageHight) {
         $('.cqum-sidenav a').css({
           color: '#767676',
-          borderLeft: '1px solid #fff'
+          borderLeft: '1px solid #fff',
+          fontWeight: 'normal'
         });
         $('.nav-about').css({
           color: '#337ab7',
-          borderLeft: '1px solid #337ab7'
+          borderLeft: '1px solid #337ab7',
+          fontWeight: 'bold'
         });
       }
-      else if (scrolltop == 1160) {
+      else if (scrolltop == pageHight) {
         $('.cqum-sidenav a').css({
           color: '#767676',
-          borderLeft: '1px solid #fff'
+          borderLeft: '1px solid #fff',
+          fontWeight: 'normal'
         });
         $('.nav-contact-us').css({
           color: '#337ab7',
-          borderLeft: '1px solid #337ab7'
+          borderLeft: '1px solid #337ab7',
+          fontWeight: 'bold'
         });
       }
     });
