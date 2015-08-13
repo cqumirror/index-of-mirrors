@@ -46,7 +46,7 @@ GET    /api/mirrors/list
 
 |参数|意义|备注|
 |----|----|----|
-|id||应仅包含 [a-z] 和 \_|
+|id||应仅包含 [a-z] 和 -|
 |name|显示名字|参见镜像官方|
 |url|镜像链接|现需完整 url|
 |help|镜像使用帮助链接|现链接到相应 wiki 页|
@@ -85,7 +85,7 @@ GET    /api/mirrors/status
 
 ####获取镜像站公告
 ```
-GET    /api/mirrors/notice
+GET    /api/mirrors/notices
 ```
 
 返回列表中的对象:
@@ -96,9 +96,9 @@ GET    /api/mirrors/notice
 }
 ```
 
-####获取快速获取中的列表
+####获取快速获取中的操作系统列表
 ```
-GET    /api/mirrors/downloads
+GET    /api/mirrors/oses
 ```
 
 返回列表中的对象:
@@ -107,9 +107,29 @@ GET    /api/mirrors/downloads
     "id": "archlinux",
     "name": "Arch Linux",
     "url": "http://b.mirrors.lanunion.org/archlinux",
+    "type": "os",
     "count": 3,
     "versions": [{"version": "2015.08.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso"},
                  {"version": "2015.07.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso"},
                  {"version": "2015.06.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso"}]
+}
+```
+
+####获取快速获取中的软件列表
+```
+GET    /api/mirrors/osses
+```
+
+返回列表中的对象:
+```
+{
+    "id": "tomcat",
+    "name": "Apache Tomcat",
+    "url": "http://mirrors.cqu.edu.cn/apache",
+    "type": "oss",
+    "count": 3,
+    "versions": [{"version": "8.0", "url": "http://mirrors.cqu.edu.cn/apache/tomcat/tomcat-8/"},
+                 {"version": "7.0", "url": "http://mirrors.cqu.edu.cn/apache/tomcat/tomcat-7/"},
+                 {"version": "6.0", "url": "http://mirrors.cqu.edu.cn/apache/tomcat/tomcat-6/"}]
 }
 ```
