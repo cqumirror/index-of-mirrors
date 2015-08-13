@@ -32,12 +32,13 @@ GET    /api/mirrors/list
 {
     "id": "archlinux",
     "name": "Arch Linux",
-    "alt": "http://mirrors.cqu.edu.cn/archlinux",
+    "url": "http://b.mirrors.lanunion.org/archlinux",
     "help": "http://mirrors.cqu.edu.cn/wiki?page=archlinux",
     "comment": "",
     "last_update": "2015-08-11 12:40:00",
+    "size": "120G",
     "status": 200,
-    "errmsg": ""
+    "message": ""
 }
 ```
 
@@ -47,16 +48,18 @@ GET    /api/mirrors/list
 |----|----|----|
 |id||应仅包含 [a-z] 和 \_|
 |name|显示名字|参见镜像官方|
-|alt|镜像链接|现需完整 url|
+|url|镜像链接|现需完整 url|
 |help|镜像使用帮助链接|现链接到相应 wiki 页|
 |comment|镜像备注|新镜像标注 new, 没有则为空|
 |last_update|最后更新时间||
+|size|镜像大小||
 |status|镜像更新状态|具体代码含义参加下表|
-|errmsg|根据 status 给出相应信息, 没有则为空||
+|message|根据 status 给出相应信息, 没有则为空||
 
 `status` 状态说明:
 
 |状态码|含义|备注|
+|----|----|----|
 |100|Syncing|正在更新|
 |200|Success|更新成功|
 |300|Freeze|镜像冻结|
@@ -74,8 +77,9 @@ GET    /api/mirrors/status
 {
     "id": "archlinux",
     "last_update": "2015-08-21 12:42:20",
+    "size": "120G",
     "status": 100,
-    "errmsg": ""
+    "message": ""
 }
 ```
 
@@ -89,5 +93,23 @@ GET    /api/mirrors/notice
 {
     "created_at": "2015-08-21 01:02:00",
     "notice": "镜像站添了点东西"
+}
+```
+
+####获取快速获取中的列表
+```
+GET    /api/mirrors/downloads
+```
+
+返回列表中的对象:
+```
+{
+    "id": "archlinux",
+    "name": "Arch Linux",
+    "url": "http://b.mirrors.lanunion.org/archlinux",
+    "count": 3,
+    "versions": [{"version": "2015.08.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso"},
+                 {"version": "2015.07.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso"},
+                 {"version": "2015.06.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso"}]
 }
 ```
