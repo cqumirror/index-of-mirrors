@@ -4,7 +4,8 @@ CQU Mirror Site back-end
 ##About back-end api
 1. 数据返回格式统一使用 `json`
 2. HTTP Method: `GET`
-3. 返回值为单个对象:
+3. 时间格式: yyyy-MM-dd HH:mm:ss
+4. 返回值为单个对象:
 
 
 ```
@@ -30,8 +31,8 @@ GET    /api/mirrors/list
 返回列表中对象:
 ```
 {
-    "id": "archlinux",
-    "name": "Arch Linux",
+    "name": "archlinux",
+    "fullname": "Arch Linux",
     "url": "http://b.mirrors.lanunion.org/archlinux",
     "help": "http://mirrors.cqu.edu.cn/wiki?page=archlinux",
     "comment": "",
@@ -46,8 +47,8 @@ GET    /api/mirrors/list
 
 |参数|意义|备注|
 |----|----|----|
-|id||应仅包含 [a-z] 和 -|
-|name|显示名字|参见镜像官方|
+|name||应仅包含 [a-z] 和 -|
+|fullname|显示名字|参见镜像官方|
 |url|镜像链接|现需完整 url|
 |help|镜像使用帮助链接|现链接到相应 wiki 页|
 |comment|镜像备注|新镜像标注 new, 没有则为空|
@@ -63,7 +64,9 @@ GET    /api/mirrors/list
 |100|Syncing|正在更新|
 |200|Success|更新成功|
 |300|Freeze|镜像冻结|
-|400|Unknown|更新失败|
+|400|failed|更新失败|
+|500|unknown|状态不明|
+
 
 
 ####获取镜像更新状态
@@ -75,7 +78,7 @@ GET    /api/mirrors/status
 返回列表中的对象:
 ```
 {
-    "id": "archlinux",
+    "name": "archlinux",
     "last_update": "2015-08-21 12:42:20",
     "size": "120G",
     "status": 100,
@@ -104,8 +107,8 @@ GET    /api/mirrors/oses
 返回列表中的对象:
 ```
 {
-    "id": "archlinux",
-    "name": "Arch Linux",
+    "name": "archlinux",
+    "fullname": "Arch Linux",
     "url": "http://b.mirrors.lanunion.org/archlinux",
     "type": "os",
     "count": 3,
@@ -123,8 +126,8 @@ GET    /api/mirrors/osses
 返回列表中的对象:
 ```
 {
-    "id": "tomcat",
-    "name": "Apache Tomcat",
+    "name": "tomcat",
+    "fullname": "Apache Tomcat",
     "url": "http://mirrors.cqu.edu.cn/apache",
     "type": "oss",
     "count": 3,
