@@ -1,9 +1,10 @@
 #!env/bin/python
 # coding=utf-8
 
-import MySQLdb
 import os.path
+import mysql.connector as db_connector
 
+from mysql.connector import errorcode
 from flask import Flask, jsonify, request, redirect, g
 
 
@@ -18,18 +19,12 @@ app.config.from_envvar("MIRRORS_SETTINGS")
 
 def connect_db():
     """Connect to the specific database."""
-    conn = MySQLdb.connect(user=app.config["USER"],
-                           passwd=app.config["PASSWORD"],
-                           host=app.config["HOST"],
-                           db=app.config["DATABASE"])
+    conn = db_connector.connect(user=app.config["USER"],
+                                passwd=app.config["PASSWORD"],
+                                host=app.config["HOST"],
+                                port=app.config["PORT"],
+                                db=app.config["DATABASE"])
     return conn
-
-
-# def init_db():
-#    """Initializes the database."""
-#    db = get_db()
-#    with app.open_resource("schema.sql", mode='r') as f:
-#        db.cursor().excute(f.read())
 
 
 def get_db():
@@ -53,13 +48,13 @@ def get_mirrors_list():
     cursor = get_db().cursor()
     cursor.execute("SELECT * FROM mirrors_info")
     res = dict(count=0, targets=[])
-    for row in cursor.fetchall():
-        mirror_help = row[5] if row[5] is not None else ''
-        mirror_comment = row[6] if row[6] is not None else ''
+    for (row_id, name, fullname, host, path, raw_help, comment) in cursor.fetchall():
+        mirror_help = raw_help if raw_help is not None else ''
+        mirror_comment = comment if comment is not None else ''
         target = dict(
-            name=row[1],
-            fullname=row[2],
-            url=''.join([row[3], row[4]]),   # host + path
+            name=name,
+            fullname=fullname,
+            url=''.join([host, path]),
             help=mirror_help,
             comment=mirror_comment,
             last_update="0000-00-00 00:00:00",
@@ -103,6 +98,10 @@ def get_error_message(code):
     return message
 
 
+def format_size(size):
+    return round(float(size) / (1024 * 1024), 2)
+
+
 def prepare_mirrors_status(target):
     """Update last_update, size, status, message"""
     mirror_log = '.'.join([target["name"], "log"])
@@ -124,7 +123,7 @@ def prepare_mirrors_status(target):
             if stage == "SyncCompt":
                 time = ' '.join([last_line_values[0], last_line_values[1]])
                 target["last_update"] = time
-                target["size"] = last_line_values[3]
+                target["size"] = ''.join([str(format_size(int(last_line_values[3]))), 'G'])   # KB to GB
                 if second_last_values[-2] == "SyncError":
                     error_code = second_last_values[3]
                     error_message = get_error_message(error_code)
@@ -138,7 +137,7 @@ def prepare_mirrors_status(target):
             if stage == "SyncStart":
                 time = ' '.join([second_last_values[0], second_last_values[1]])
                 target["last_update"] = time
-                target["size"] = last_line_values[3]
+                target["size"] = ''.join([str(format_size(int(last_line_values[3]))), 'G'])   # KB to GB
                 target["message"] = ''
                 target["status"] = 100
     except IOError:
@@ -151,10 +150,10 @@ def get_mirrors_status():
     cursor = get_db().cursor()
     cursor.execute("SELECT name FROM mirrors_info")
     res = dict(count=0, targets=[])
-    for row in cursor.fetchall():
+    for (name,) in cursor.fetchall():
         # Only name in row
         target = dict(
-            name=row[0],
+            name=name,
             last_update="0000-00-00 00:00:00",
             size="unknown",
             status=500,
@@ -175,9 +174,47 @@ def get_mirrors_notices():
     return jsonify(res)
 
 
+def format_version(version):
+    if '-' not in version:
+        return version
+
+    # Format: 7.1 (x86_64, Minimal, ...)
+    values = version.split('-')
+    version_f = "{} ({})".format(values[0], ", ".join(values[1:]))
+    return version_f
+
+
 @app.route("/api/mirrors/oses")
 def get_mirrors_oses():
-    return jsonify(dict(count=0, targets=[]))
+    cursor = get_db().cursor()
+    cursor.execute("SELECT DISTINCT name FROM mirrors_downloads WHERE type = %s", ("os",))
+    names = [name for (name,) in cursor]
+    res = dict(count=0, targets=[])
+    for name in names:
+        os = dict(
+            name=name,
+            fullname="",
+            url="",
+            type="os",
+            count=0,
+            versions=[]
+        )
+        # Find all links for kinds of versions of the os
+        cursor.execute("SELECT fullname, host, dir, path, version FROM mirrors_downloads WHERE name = %s", (name,))
+        for (fullname, host, base_dir, path, raw_version) in cursor.fetchall():
+            url = ''.join([host, base_dir])
+            full_path = ''.join([host, path])
+            version_value = format_version(raw_version)
+            version = dict(version=version_value, url=full_path)
+            os["versions"].append(version)
+            os["count"] += 1
+            # TODO(@Zhiqiang He): Find a better method to update fullname and url
+            os["fullname"] = fullname
+            os["url"] = url
+        # Append the os to list
+        res["targets"].append(os)
+        res["count"] += 1
+    return jsonify(res)
 
 
 @app.route("/api/mirrors/osses")
