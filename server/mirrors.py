@@ -1,6 +1,7 @@
 #!env/bin/python
 # coding=utf-8
 
+import logging
 import os.path
 import mysql.connector as db_connector
 
@@ -9,7 +10,8 @@ from flask import Flask, jsonify, request, redirect, g
 
 
 # Default configuration
-SYNC_LOG_DIR = "log"
+LOG_DIR = "log"
+APP_NAME = "Actor"
 
 # Create the application
 app = Flask(__name__)
@@ -17,13 +19,34 @@ app.config.from_object(__name__)
 app.config.from_envvar("MIRRORS_SETTINGS")
 
 
+# Create file log
+def error_log_file_handler():
+    # Create error log file
+    log_name = '.'.join([APP_NAME.lower(), "error", "log"])
+    if "ERROR_LOG" in app.config:
+        log_name = app.config["ERROR_LOG"]
+    error_log = os.path.join(LOG_DIR, log_name)
+
+    fh = logging.FileHandler(error_log)
+    fh.setLevel(logging.ERROR)
+    formatter = logging.Formatter(fmt="%(asctime)s %(levelname)s: %(message)s"
+                                      "[in %(pathname)s:%(lineno)d]",
+                                  datefmt="%Y-%m-%d %H:%M:%S")
+    fh.setFormatter(formatter)
+    return fh
+
+
+app.logger.addHandler(error_log_file_handler())
+
+
 def connect_db():
     """Connect to the specific database."""
-    conn = db_connector.connect(user=app.config["USER"],
-                                passwd=app.config["PASSWORD"],
-                                host=app.config["HOST"],
-                                port=app.config["PORT"],
-                                db=app.config["DATABASE"])
+    db_config = dict(user=app.config["DB_USER"],
+                     passwd=app.config["DB_PASSWORD"],
+                     host=app.config["DB_HOST"],
+                     port=app.config["DB_PORT"],
+                     db=app.config["DB_DATABASE"])
+    conn = db_connector.connect(**db_config)
     return conn
 
 
@@ -224,7 +247,7 @@ def get_mirrors_osses():
 
 @app.after_request
 def custom_headers(res):
-    res.headers["Server"] = "Bang+"
+    res.headers["Server"] = APP_NAME
     return res
 
 
