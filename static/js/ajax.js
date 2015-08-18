@@ -20,14 +20,18 @@ $.ajax({
 })
 
 // update status
-//$.ajax({
-//    url: '/api/mirrors/status',
-//    type: 'get'
-//})
-//.done(function (resData) {
-//    //resData = JSON.parse(resData);
-//    updateStatus(resData);
-//})
+setInterval(function () {
+    $.ajax({
+        url: '/api/mirrors/status',
+        type: 'get'
+    })
+    .done(function (resData) {
+        //resData = JSON.parse(resData);
+        updateStatus(resData);
+    })
+}, 10000);
+
+
 
 // show source list
 function showSourceList(resData) {
@@ -60,9 +64,15 @@ function showSourceList(resData) {
         $('.' + data[i].id).children('.name').children('a').attr('href', data[i].url);
         $('.' + data[i].id).children('.last-update').append(data[i].last_update);
 
+        // update status
         if (data[i].status == 100) $('.' + data[i].id).children('.statu').html(syclingLabel);
-        if (data[i].status == 200) $('.' + data[i].id).children('.statu').html(successLabel);
-        if (data[i].status == 300 || data[i].status == 400) $('.' + data[i].id).children('.statu').html(unknownLabel);
+        else if (data[i].status == 200) $('.' + data[i].id).children('.statu').html(successLabel);
+        else {
+            if (data[i].status == 300) unknownLabel.html('Freeze');
+            if (data[i].status == 400) unknownLabel.html('Failed');
+            if (data[i].status == 500) unknownLabel.html('Unknown');
+            $('.' + data[i].id).children('.statu').html(unknownLabel);
+        }
 
         // extra info
         if (data[i].comment == 'new') $('.' + data[i].id).children('.name').append(newIcon);
@@ -79,7 +89,15 @@ function showSourceList(resData) {
 function showNotice(resData) {
     // if have new notice
     if (resData.count > 0) {
-        $('.new-notice .notice-detail').html(resData.targets[0].notice);
+        // not just one notice
+        var string = '';
+        for (var i = 0; i < resData.count; ++i) {
+            string += resData.targets[i].notice;
+            if (i != resData.count - 1) {
+                string += '</br>';
+            }
+        }
+        $('.new-notice .notice-detail').html(string);
         $('.new-notice').css('display', 'block');
     }
 }
@@ -93,15 +111,19 @@ function updateStatus(resData) {
     for (var i = 0; i < length; ++i) {
         // node for statu
         var successLabel = $('<span class="label label-statu label-success">Success</span>');
-        var unknownLabel = $('<span class="label label-statu label-default">Unknown</span>');
+        var unknownLabel = $('<span class="label label-statu label-default"></span>');
         var syclingLabel = $('<span class="label label-statu label-info">Syncing</span>');
         // update last update
         $('.' + data[i].id).children('.last-update').html(data[i].last_update);
         // update statu
         if (data[i].status == 100) $('.' + data[i].id).children('.statu').html(syclingLabel);
-        if (data[i].status == 200) $('.' + data[i].id).children('.statu').html(successLabel);
-        if (data[i].status == 300 || data[i].status == 400) $('.' + data[i].id).children('.statu').html(syclingLabel);
-
+        else if (data[i].status == 200) $('.' + data[i].id).children('.statu').html(successLabel);
+        else {
+            if (data[i].status == 300) unknownLabel.html('Freeze');
+            if (data[i].status == 400) unknownLabel.html('Failed');
+            if (data[i].status == 500) unknownLabel.html('Unknown');
+            $('.' + data[i].id).children('.statu').html(unknownLabel);
+        }
     }
 }
 
@@ -195,74 +217,44 @@ $('.os-so-selector a').click(function () {
     $('.release-btn').attr("disabled", false);
 
     $('.release-selector').append($('<li>加载中...</li>'));
+
     // ask the list
-    //$.ajax({
-    //    url: url,
-    //    type: 'get'
-    //})
-    //.done(function (resData) {
-    //    $('.release-selector').html('');
-    //    var resData = {
-
-    //        "count": 1,
-    //        "targets": [{
-    //            "id": "archlinux",
-    //            "name": "Arch Linux",
-    //            "url": "http://b.mirrors.lanunion.org/archlinux",
-    //            "type": "os",
-    //            "count": 3,
-    //            "versions": [{ "version": "2015.08.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso" },
-    //                         { "version": "2015.07.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" },
-    //                         { "version": "2015.06.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" }]
-    //        }
-    //        ]
-
-
-    //    }
-    //    showDownloadList(resData);
-    //});
+    $.ajax({
+        url: url,
+        type: 'get'
+    })
+    .done(function (resData) {
+        $('.release-selector').html('');
+        showDownloadList(resData);
+    });
     
-    $('.release-selector').html('');
-    var resData = {
+    //$('.release-selector').html('');
+    //var resData = {
 
-        "count": 2,
-        "targets": [{
-            "id": "archlinux",
-            "name": "Arch Linux",
-            "url": "http://b.mirrors.lanunion.org/archlinux",
-            "type": "os",
-            "count": 3,
-            "versions": [{ "version": "2015.08.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso" },
-                         { "version": "2015.07.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" },
-                         { "version": "2015.06.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" }]
-        },
-        {
-            "id": "linux",
-            "name": "Linux",
-            "url": "http://b.mirrors.lanunion.org/archlinux",
-            "type": "os",
-            "count": 3,
-            "versions": [{ "version": "1", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso" },
-                         { "version": "2", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" },
-                         { "version": "3", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" }]
-        }
-        ]
+    //    "count": 2,
+    //    "targets": [{
+    //        "id": "archlinux",
+    //        "name": "Arch Linux",
+    //        "url": "http://b.mirrors.lanunion.org/archlinux",
+    //        "type": "os",
+    //        "count": 3,
+    //        "versions": [{ "version": "2015.08.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso" },
+    //                     { "version": "2015.07.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" },
+    //                     { "version": "2015.06.01", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" }]
+    //    },
+    //    {
+    //        "id": "linux",
+    //        "name": "Linux",
+    //        "url": "http://b.mirrors.lanunion.org/archlinux",
+    //        "type": "os",
+    //        "count": 3,
+    //        "versions": [{ "version": "1", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso" },
+    //                     { "version": "2", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" },
+    //                     { "version": "3", "url": "http://b.mirrors.lanunion.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso" }]
+    //    }
+    //    ]
 
 
-    }
-    showDownloadList(resData);
-})
-
-$('.release-selector a').click(function () {
-
-    $('.release-val').html(this.text);
-
-    $('.version-btn').attr("disabled", false);
-})
-
-$('.version-selector a').click(function () {
-
-    $('.version-val').html(this.text);
-
-    $('.download-btn').attr("disabled", false);
+    //}
+    //showDownloadList(resData);
 })
