@@ -191,8 +191,9 @@ def get_mirrors_status():
 @app.route("/api/mirrors/notices")
 def get_mirrors_notices():
     res = {
-        "count": 1,
-        "targets": [{"created_at": "2015-08-21 01:02:00", "notice": "改了下"}]
+        "count": 2,
+        "targets": [{"created_at": "2015-08-21 01:02:00", "notice": "这是第一条公告: 你好,地球"},
+                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第二条公告: Beta 测试"}]
     }
     return jsonify(res)
 
