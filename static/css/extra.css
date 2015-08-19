@@ -26,6 +26,9 @@ body {
     font-family:'Helvetica Neue', Helvetica, Arial, DengXian;
 }
 
+.btn-group button {
+    overflow: hidden;
+}
 .new-notice {
     width: auto;
     height: auto;
