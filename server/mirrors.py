@@ -19,7 +19,7 @@ app.config.from_object(__name__)
 app.config.from_envvar("MIRRORS_SETTINGS")
 
 
-# Create file log
+# Create log file
 def error_log_file_handler():
     # Create error log file
     log_name = '.'.join([APP_NAME.lower(), "error", "log"])
@@ -192,7 +192,7 @@ def get_mirrors_status():
 def get_mirrors_notices():
     res = {
         "count": 1,
-        "targets": [{"Test": "据说编码有问题,我试试"}]
+        "targets": [{"created_at": "2015-08-21 01:02:00", "notice": "改了下"}]
     }
     return jsonify(res)
 
