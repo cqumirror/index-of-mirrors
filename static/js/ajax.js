@@ -7,11 +7,12 @@ $.ajax({
 .done(function (resData) {
     //resData = JSON.parse(resData);
     showSourceList(resData);
+
 })
 
 // get notice
 $.ajax({
-    url: '/api/mirrors/notice',
+    url: '/api/mirrors/notices',
     type: 'get'
 })
 .done(function (resData) {
@@ -41,10 +42,11 @@ function showSourceList(resData) {
     
 
     for (var i = 0; i < length; ++i) {
+        
 
         var newIcon = $('<span class="label label-new label-success">New</span>');
 
-        var rowHTML = '<td class="name"><a></a></td><td class="last-update"></td><td class="statu"></td>';
+        var rowHTML = $('<td class="name"><a></a></td><td class="last-update"></td><td class="statu"></td>');
 
         // node for statu
         var successLabel = $('<span class="label label-statu label-success">Success</span>');
@@ -54,32 +56,33 @@ function showSourceList(resData) {
         // create a row node
         var row = $("<tr></tr>");
         row.html(rowHTML);
-        row.addClass(data[i].id);
+        row.addClass(data[i].name);
+        //console.log(data[i].name);
 
         // append the row to the table
         $('.the-list').append(row);
 
         // update the row's info
-        $('.' + data[i].id).children('.name').children('a').append(data[i].name);
-        $('.' + data[i].id).children('.name').children('a').attr('href', data[i].url);
-        $('.' + data[i].id).children('.last-update').append(data[i].last_update);
-
+        $('.' + data[i].name).children('.name').children('a').html(data[i].name);
+        $('.' + data[i].name).children('.name').children('a').attr('href', data[i].url);
+        $('.' + data[i].name).children('.last-update').append(data[i].last_update);
+        
         // update status
-        if (data[i].status == 100) $('.' + data[i].id).children('.statu').html(syclingLabel);
-        else if (data[i].status == 200) $('.' + data[i].id).children('.statu').html(successLabel);
+        if (data[i].status == 100) $('.' + data[i].name).children('.statu').html(syclingLabel);
+        else if (data[i].status == 200) $('.' + data[i].name).children('.statu').html(successLabel);
         else {
             if (data[i].status == 300) unknownLabel.html('Freeze');
             if (data[i].status == 400) unknownLabel.html('Failed');
             if (data[i].status == 500) unknownLabel.html('Unknown');
-            $('.' + data[i].id).children('.statu').html(unknownLabel);
+            $('.' + data[i].name).children('.statu').html(unknownLabel);
         }
 
         // extra info
-        if (data[i].comment == 'new') $('.' + data[i].id).children('.name').append(newIcon);
+        if (data[i].comment == 'new') $('.' + data[i].name).children('.name').append(newIcon);
         if (data[i].help != '') {
             var help = $('<a class="help-icon" href="javascript:;" title="Help"></a>').append($('<span class="glyphicon glyphicon-question-sign"></span>'));
             help.attr('href', data[i].help);
-            $('.' + data[i].id).children('.name').append(help);
+            $('.' + data[i].name).children('.name').append(help);
         }
     }
 }
@@ -114,15 +117,15 @@ function updateStatus(resData) {
         var unknownLabel = $('<span class="label label-statu label-default"></span>');
         var syclingLabel = $('<span class="label label-statu label-info">Syncing</span>');
         // update last update
-        $('.' + data[i].id).children('.last-update').html(data[i].last_update);
+        $('.' + data[i].name).children('.last-update').html(data[i].last_update);
         // update statu
-        if (data[i].status == 100) $('.' + data[i].id).children('.statu').html(syclingLabel);
-        else if (data[i].status == 200) $('.' + data[i].id).children('.statu').html(successLabel);
+        if (data[i].status == 100) $('.' + data[i].name).children('.statu').html(syclingLabel);
+        else if (data[i].status == 200) $('.' + data[i].name).children('.statu').html(successLabel);
         else {
             if (data[i].status == 300) unknownLabel.html('Freeze');
             if (data[i].status == 400) unknownLabel.html('Failed');
             if (data[i].status == 500) unknownLabel.html('Unknown');
-            $('.' + data[i].id).children('.statu').html(unknownLabel);
+            $('.' + data[i].name).children('.statu').html(unknownLabel);
         }
     }
 }
