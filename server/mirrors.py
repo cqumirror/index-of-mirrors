@@ -5,6 +5,7 @@ import logging
 import os.path
 import mysql.connector as db_connector
 
+from datetime import datetime
 from mysql.connector import errorcode
 from flask import Flask, jsonify, request, redirect, g
 
@@ -68,16 +69,17 @@ def close_db(error):
 
 @app.route("/api/mirrors/list")
 def get_mirrors_list():
+    """Return a list of all the mirrors"""
     cursor = get_db().cursor()
-    cursor.execute("SELECT * FROM mirrors_info")
+    cursor.execute("SELECT name, fullname, protocol, host, path, help, comment FROM mirrors_info")
     res = dict(count=0, targets=[])
-    for (row_id, name, fullname, host, path, raw_help, comment) in cursor.fetchall():
+    for (name, fullname, protocol, host, path, raw_help, comment) in cursor.fetchall():
         mirror_help = raw_help if raw_help is not None else ''
         mirror_comment = comment if comment is not None else ''
         target = dict(
             name=name,
             fullname=fullname,
-            url=''.join([host, path]),
+            url=''.join([protocol, "://", host, path]),
             help=mirror_help,
             comment=mirror_comment,
             last_update="0000-00-00 00:00:00",
@@ -88,7 +90,7 @@ def get_mirrors_list():
         # Update last_update, size, status, message from sync log
         prepare_mirrors_status(target)
         res["targets"].append(target)
-        res["count"] += 1
+    res["count"] = len(res["targets"])
     return jsonify(res)
 
 
@@ -126,7 +128,7 @@ def format_size(size):
 
 
 def prepare_mirrors_status(target):
-    """Update last_update, size, status, message"""
+    """Update mirrors' last_update, size, status, message property"""
     mirror_log = '.'.join([target["name"], "log"])
     mirror_log_path = os.path.join(app.config["SYNC_LOG_DIR"], mirror_log)
     try:
@@ -143,9 +145,12 @@ def prepare_mirrors_status(target):
             second_last_values = lines[-2].rstrip().split(" - ")
             stage = last_line_values[2]
 
+            time_old_format = "%Y%m%d %H:%M:%S"
+            time_new_format = "%Y-%m-%d %H:%M:%S"
+
             if stage == "SyncCompt":
                 time = ' '.join([last_line_values[0], last_line_values[1]])
-                target["last_update"] = time
+                target["last_update"] = datetime.strptime(time, time_old_format).strftime(time_new_format)
                 target["size"] = ''.join([str(format_size(int(last_line_values[3]))), 'G'])   # KB to GB
                 if second_last_values[-2] == "SyncError":
                     error_code = second_last_values[3]
@@ -159,12 +164,12 @@ def prepare_mirrors_status(target):
 
             if stage == "SyncStart":
                 time = ' '.join([second_last_values[0], second_last_values[1]])
-                target["last_update"] = time
+                target["last_update"] = datetime.strptime(time, time_old_format).strftime(time_new_format)
                 target["size"] = ''.join([str(format_size(int(last_line_values[3]))), 'G'])   # KB to GB
                 target["message"] = ''
                 target["status"] = 100
     except IOError:
-        target["message"] = "Sync log file read fail."
+        target["message"] = "Fail to read sync log file."
         target["status"] = 500
 
 
@@ -184,7 +189,7 @@ def get_mirrors_status():
         )
         prepare_mirrors_status(target)
         res["targets"].append(target)
-        res["count"] += 1
+    res["count"] = len(res["targets"])
     return jsonify(res)
 
 
@@ -202,7 +207,7 @@ def format_version(version):
     if '-' not in version:
         return version
 
-    # Format: 7.1 (x86_64, Minimal, ...)
+    # Target format: 7.1 (x86_64, Minimal, ...)
     values = version.split('-')
     version_f = "{} ({})".format(values[0], ", ".join(values[1:]))
     return version_f
@@ -224,20 +229,21 @@ def get_mirrors_oses():
             versions=[]
         )
         # Find all links for kinds of versions of the os
-        cursor.execute("SELECT fullname, host, dir, path, version FROM mirrors_downloads WHERE name = %s", (name,))
-        for (fullname, host, base_dir, path, raw_version) in cursor.fetchall():
-            url = ''.join([host, base_dir])
-            full_path = ''.join([host, path])
-            version_value = format_version(raw_version)
-            version = dict(version=version_value, url=full_path)
+        cursor.execute("SELECT fullname, protocol, host, dir, path, version "
+                       "FROM mirrors_downloads WHERE name = %s", (name,))
+        for (fullname, protocol, host, directory, path, raw_version) in cursor.fetchall():
+            base_dir = ''.join([protocol, "://", host, directory])
+            url = ''.join([protocol, "://", host, path])
+            version_f = format_version(raw_version)
+            version = dict(version=version_f, url=url)
             os["versions"].append(version)
-            os["count"] += 1
             # TODO(@Zhiqiang He): Find a better method to update fullname and url
             os["fullname"] = fullname
-            os["url"] = url
+            os["url"] = base_dir
+        os["count"] = len(os["versions"])
         # Append the os to list
         res["targets"].append(os)
-        res["count"] += 1
+    res["count"] = len(res["targets"])
     return jsonify(res)
 
 
