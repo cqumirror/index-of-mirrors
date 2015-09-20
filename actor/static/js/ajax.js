@@ -20,6 +20,7 @@ $.ajax({
 });
 
 // update status
+/*
 setInterval(function () {
     $.ajax({
         url: '/api/mirrors/status',
@@ -30,6 +31,7 @@ setInterval(function () {
         updateStatus(resData);
     })
 }, 10000);
+*/
 
 
 
