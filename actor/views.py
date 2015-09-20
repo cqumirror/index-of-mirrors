@@ -15,7 +15,7 @@ APP_NAME = "Actor"
 
 # Load configuration
 app.config.from_object(__name__)
-app.config.from_envvar("MIRRORS_SETTINGS")
+app.config.from_envvar("ACTOR_SETTINGS")
 
 
 # Create log file
