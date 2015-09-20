@@ -132,9 +132,6 @@ def prepare_mirrors_status(target):
     try:
         with open(mirror_log_path, 'r') as f:
             lines = f.readlines()
-            length = len(lines)
-            if length <= 1:
-                return
 
             # 0: yyyyMMdd 1: HH:mm:ss
             # 2: SyncStart | SyncSuccd | SyncError | SyncCompt
@@ -168,6 +165,9 @@ def prepare_mirrors_status(target):
                 target["status"] = 100
     except IOError:
         target["message"] = "Fail to read sync log file."
+        target["status"] = 500
+    except IndexError:
+        target["message"] = "Invalid sync log format."
         target["status"] = 500
 
 
