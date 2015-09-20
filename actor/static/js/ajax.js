@@ -7,8 +7,7 @@ $.ajax({
 .done(function (resData) {
     //resData = JSON.parse(resData);
     showSourceList(resData);
-
-})
+});
 
 // get notice
 $.ajax({
@@ -18,7 +17,7 @@ $.ajax({
 .done(function (resData) {
     //resData = JSON.parse(resData);
     showNotice(resData);
-})
+});
 
 // update status
 setInterval(function () {
@@ -260,4 +259,4 @@ $('.os-so-selector a').click(function () {
 
     //}
     //showDownloadList(resData);
-})
+});

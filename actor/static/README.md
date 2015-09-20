@@ -2,6 +2,7 @@ CQU Mirror Site front-end
 ===
 
 ##Link
+- Status
 - CQU Mirrors
 - Wiki
 - Blog
@@ -30,6 +31,7 @@ Chongqing University Open Source Mirror Site
 1. 本镜像支持 IPv4 访问
 2. 本镜像支持 HTTP 协议访问
 3. 本镜像站更新频率一天两次
+
 
 ##Footer
 ###Contact Us
