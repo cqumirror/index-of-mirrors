@@ -65,7 +65,7 @@ GET    /api/mirrors/list
 |200|Success|更新成功|
 |300|Freeze|镜像冻结|
 |400|Failed|更新失败|
-|500|unknown|状态不明|
+|500|Unknown|状态不明|
 
 
 

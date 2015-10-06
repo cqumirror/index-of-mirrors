@@ -69,7 +69,7 @@ def close_db(error):
 def get_mirrors_list():
     """Return a list of all the mirrors"""
     cursor = get_db().cursor()
-    cursor.execute("SELECT name, fullname, protocol, host, path, help, comment FROM mirrors_info")
+    cursor.execute("SELECT name, fullname, protocol, host, path, help, comment FROM mirrors_info ORDER BY name")
     res = dict(count=0, targets=[])
     for (name, fullname, protocol, host, path, raw_help, comment) in cursor.fetchall():
         mirror_help = raw_help if raw_help is not None else ''
@@ -196,7 +196,8 @@ def get_mirrors_notices():
     res = {
         "count": 2,
         "targets": [{"created_at": "2015-08-21 01:02:00", "notice": "这是第一条公告: 你好,地球"},
-                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第二条公告: Beta 测试"}]
+                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第二条公告: beta 测试"},
+                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第三条公告: 部署完毕"}]
     }
     return jsonify(res)
 
