@@ -196,8 +196,8 @@ def get_mirrors_notices():
     res = {
         "count": 3,
         "targets": [{"created_at": "2015-08-21 01:02:00", "notice": "这是第一条公告: 你好,地球"},
-                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第二条公告: beta 测试"},
-                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第三条公告: 部署完毕"}]
+                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第二条公告: doing..."},
+                    {"created_at": "2015-10-27 11:02:00", "notice": "这是第三条公告: deploy successfully"}]
     }
     return jsonify(res)
 
