@@ -27,7 +27,7 @@ def prepare():
 
 
 def put_config_files():
-    # Update gunicorn's config
+    # update gunicorn's config
     put("server/gunicorn.py", target_dir)
     put("server/settings.cfg", target_dir)
 
@@ -36,14 +36,14 @@ def deploy():
     put_config_files()
     with cd(code_dir):
         run("rm -rf /srv/actor/actor.bak")
-        run("mv /srv/actor/actor{,.bak}")   # Back up
+        run("mv /srv/actor/actor{,.bak}")   # back up
         run("cp -r actor /srv/actor")
-        # Update requirements for actor
+        # update requirements for actor
         run("cp requirements.txt /srv/actor")
         run("cp schema.sql /srv/actor")
-        # Update static files
+        # update static files
         run("rm -rf /www/mirrors/static.bak")
-        run("mv /www/mirrors/static{,.bak}")     # Back up
+        run("mv /www/mirrors/static{,.bak}")     # back up
         run("cp -r actor/static /www/mirrors")
 
 
@@ -56,11 +56,11 @@ def update_db():
 def start():
     with cd(target_dir):
         actor_pid_file = "gunicorn-actor.pid"
-        # Reload if actor running
+        # kill old processes gracefully if actor running
         if exists(actor_pid_file):
             run("export ACTOR_SETTINGS=/srv/actor/settings.cfg && "
-                "kill -HUP $(<{})".format(actor_pid_file))
-        else:
-            # Start new gunicorn processes
-            run("export ACTOR_SETTINGS=/srv/actor/settings.cfg && "
-                ".pyenv/bin/gunicorn -c gunicorn.py actor:app -D")
+                "kill -TERM $(<{})".format(actor_pid_file))
+        # start new gunicorn processes
+        run("export ACTOR_SETTINGS=/srv/actor/settings.cfg && "
+            ".pyenv/bin/gunicorn -c gunicorn.py actor:app -D")
+
