@@ -1,4 +1,4 @@
-from fabric.api import env, cd, run, put
+from fabric.api import cd, run, put
 from fabric.contrib.files import exists
 
 code_dir = "~/source-git/index-of-mirrors"
@@ -18,10 +18,10 @@ def prepare():
         # create virtualenv for actor if not exists and upgrade pip
         if not exists(actor_env_dir):
             run("virtualenv .pyenv")
-            # upgrade pip
-            run(".pyenv/bin/pip install --upgrade pip")
-            # init the pyenv
-            run(".pyenv/bin/pip install -r requirements.txt --allow-external mysql-connector-python")
+        # upgrade pip
+        run(".pyenv/bin/pip install --upgrade pip")
+        # init the pyenv
+        run(".pyenv/bin/pip install --upgrade -r requirements.txt --allow-external mysql-connector-python")
     # create log dir for gunicorn in /var/log
     run("mkdir -p /var/log/gunicorn")
 
