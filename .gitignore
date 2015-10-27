@@ -1,8 +1,15 @@
-# Ignore PyCharm files
+# ignore PyCharm files
 .idea/
 
-# Ignore virtualenv
+# ignore virtualenv
 env/
+.pyenv/
 
-# Mac sys files
+# mac sys files
 .DS_Store
+
+# python dev about
+*.pyc
+
+# others
+*.log

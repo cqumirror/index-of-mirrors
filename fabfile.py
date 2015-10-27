@@ -11,16 +11,18 @@ def pull():
 
 
 def prepare():
-    actor_env_dir = "env"
-    # Create target dir and log dir for actor
+    actor_env_dir = ".pyenv"
+    # create target dir and log dir for actor
     run("mkdir -p /srv/actor/log")
     with cd(target_dir):
-        # Create virtual env for actor if not exists and upgrade pip
+        # create virtualenv for actor if not exists and upgrade pip
         if not exists(actor_env_dir):
-            run("virtualenv env")
-            # Upgrade pip
-            run("env/bin/pip install --upgrade pip")
-    # Create log dir for gunicorn in /var/log
+            run("virtualenv .pyenv")
+            # upgrade pip
+            run(".pyenv/bin/pip install --upgrade pip")
+            # init the pyenv
+            run(".pyenv/bin/pip install -r requirements --allow-external mysql-connector-python")
+    # create log dir for gunicorn in /var/log
     run("mkdir -p /var/log/gunicorn")
 
 
@@ -61,4 +63,4 @@ def start():
         else:
             # Start new gunicorn processes
             run("export ACTOR_SETTINGS=/srv/actor/settings.cfg && "
-                "env/bin/gunicorn -c gunicorn.py actor:app -D")
+                ".pyenv/bin/gunicorn -c gunicorn.py actor:app -D")
