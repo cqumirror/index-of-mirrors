@@ -21,7 +21,7 @@ def prepare():
             # upgrade pip
             run(".pyenv/bin/pip install --upgrade pip")
             # init the pyenv
-            run(".pyenv/bin/pip install -r requirements --allow-external mysql-connector-python")
+            run(".pyenv/bin/pip install -r requirements.txt --allow-external mysql-connector-python")
     # create log dir for gunicorn in /var/log
     run("mkdir -p /var/log/gunicorn")
 
