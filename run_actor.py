@@ -1,3 +1,11 @@
+#!.pyenv/bin/python
+
+import os
+
+curr_path = os.path.abspath(os.curdir)
+os.environ["ACTOR_SETTINGS"] = os.path.join(curr_path, "settings.cfg")
+
+
 from actor import app
 from flask import request, redirect
 
