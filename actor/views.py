@@ -4,27 +4,19 @@ import logging
 import os.path
 import mysql.connector as db_connector
 
-from datetime import datetime
 from actor import app
+from datetime import datetime
 from flask import jsonify, g
+from domains import db, MirrorsInfo, MirrorsResources
 
 
-# Default configuration
-LOG_DIR = "log"
-APP_NAME = "Actor"
-
-# Load configuration
-app.config.from_object(__name__)
-app.config.from_envvar("ACTOR_SETTINGS")
-
-
-# Create log file
+# create log file
 def error_log_file_handler():
-    # Create error log file
-    log_name = '.'.join([APP_NAME.lower(), "error", "log"])
+    # create error log file
+    log_name = '.'.join([app.config["APP_NAME"].lower(), "error", "log"])
     if "ERROR_LOG" in app.config:
         log_name = app.config["ERROR_LOG"]
-    error_log = os.path.join(LOG_DIR, log_name)
+    error_log = os.path.join(app.config["LOG_DIR"], log_name)
 
     fh = logging.FileHandler(error_log)
     fh.setLevel(logging.ERROR)
@@ -65,9 +57,35 @@ def close_db(error):
         g.mysql_db.close()
 
 
+@app.route("/api/dev/mirrors/list")
+def dev_get_mirrors_list():
+    """Return a list of all the mirrors."""
+    mirrors = MirrorsInfo.query.order_by(MirrorsInfo.name)
+    res = dict(count=0, targets=[])
+    for mirror in mirrors:
+        mirror_help = mirror.help if mirror.help is not None else ''
+        mirror_comment = mirror.comment if mirror.comment is not None else ''
+        target = dict(
+            name=mirror.name,
+            fullname=mirror.fullname,
+            url=''.join([mirror.protocol, "://", mirror.host, mirror.path]),
+            help=mirror_help,
+            comment=mirror_comment,
+            last_update="????-??-?? ??:??:??",
+            size="unknown",
+            status=500,
+            message=''
+        )
+        # update last_update, size, status, message from sync log
+        prepare_mirrors_status(target)
+        res["targets"].append(target)
+    res["count"] = len(res["targets"])
+    return jsonify(res)
+
+
 @app.route("/api/mirrors/list")
 def get_mirrors_list():
-    """Return a list of all the mirrors"""
+    """Return a list of all the mirrors."""
     cursor = get_db().cursor()
     cursor.execute("SELECT name, fullname, protocol, host, path, help, comment FROM mirrors_info ORDER BY name")
     res = dict(count=0, targets=[])
@@ -85,7 +103,7 @@ def get_mirrors_list():
             status=500,
             message=''
         )
-        # Update last_update, size, status, message from sync log
+        # update last_update, size, status, message from sync log
         prepare_mirrors_status(target)
         res["targets"].append(target)
     res["count"] = len(res["targets"])
@@ -126,7 +144,7 @@ def format_size(size):
 
 
 def prepare_mirrors_status(target):
-    """Update mirrors' last_update, size, status, message property"""
+    """Update mirrors' last_update, size, status, message property."""
     mirror_log = '.'.join([target["name"], "log"])
     mirror_log_path = os.path.join(app.config["SYNC_LOG_DIR"], mirror_log)
     try:
@@ -171,6 +189,25 @@ def prepare_mirrors_status(target):
         target["status"] = 500
 
 
+@app.route("/api/dev/mirrors/status")
+def dev_get_mirrors_status():
+    mirrors = MirrorsInfo.query.all()
+    res = dict(count=0, targets=[])
+    for mirror in mirrors:
+        # Only name in row
+        target = dict(
+            name=mirror.name,
+            last_update="????-??-?? ??:??:??",
+            size="unknown",
+            status=500,
+            message=''
+        )
+        prepare_mirrors_status(target)
+        res["targets"].append(target)
+    res["count"] = len(res["targets"])
+    return jsonify(res)
+
+
 @app.route("/api/mirrors/status")
 def get_mirrors_status():
     cursor = get_db().cursor()
@@ -206,10 +243,42 @@ def format_version(version):
     if '-' not in version:
         return version
 
-    # Target format: 7.1 (x86_64, Minimal, ...)
+    # target format: 7.1 (x86_64, Minimal, ...)
     values = version.split('-')
     version_f = "{} ({})".format(values[0], ", ".join(values[1:]))
     return version_f
+
+
+@app.route("/api/dev/mirrors/oses")
+def dev_get_mirrors_oses():
+    res = dict(count=0, targets=[])
+    # query all the oses
+    query = db.session.query(MirrorsResources.name).distinct().filter(MirrorsResources.type == "os")
+    os_names = [row.name for row in query.all()]
+
+    for os_name in os_names:
+        # fetch all versions of the os
+        os_versions = MirrorsResources.query.filter_by(type="os", name=os_name).all()
+
+        # prepare the os object
+        o_s_f = dict(name=os_name, fullname='', type="os", url='', versions=[], count=0)
+
+        for (idx, o_s) in enumerate(os_versions):
+            # init the os object
+            if idx == 0:
+                o_s_f["fullname"] = o_s.fullname
+                o_s_f["url"] = ''.join([o_s.protocol, "://", o_s.host, o_s.dir])
+
+            # add new version of the os
+            os_version_f = format_version(o_s.version)
+            os_version_url = ''.join([o_s.protocol, "://", o_s.host, o_s.path])
+            version = dict(version=os_version_f, url=os_version_url)
+            o_s_f["versions"].append(version)
+        # update count of the os's version object
+        o_s_f["count"] = len(o_s_f["versions"])
+        res["targets"].append(o_s_f)
+    res["count"] = len(res["targets"])
+    return jsonify(res)
 
 
 @app.route("/api/mirrors/oses")
@@ -227,7 +296,7 @@ def get_mirrors_oses():
             count=0,
             versions=[]
         )
-        # Find all links for kinds of versions of the os
+        # find all links for kinds of versions of the os
         cursor.execute("SELECT fullname, protocol, host, dir, path, version "
                        "FROM mirrors_resources WHERE name = %s", (name,))
         for (fullname, protocol, host, directory, path, raw_version) in cursor.fetchall():
@@ -236,11 +305,11 @@ def get_mirrors_oses():
             version_f = format_version(raw_version)
             version = dict(version=version_f, url=url)
             os["versions"].append(version)
-            # TODO(@Zhiqiang He): Find a better method to update fullname and url
+            # TODO(@Zhiqiang He): Find a better method to update fullname and url.
             os["fullname"] = fullname
             os["url"] = base_dir
         os["count"] = len(os["versions"])
-        # Append the os to list
+        # append the os to list
         res["targets"].append(os)
     res["count"] = len(res["targets"])
     return jsonify(res)
@@ -253,5 +322,5 @@ def get_mirrors_osses():
 
 @app.after_request
 def custom_headers(res):
-    res.headers["Server"] = APP_NAME
+    res.headers["Server"] = app.config["APP_NAME"]
     return res

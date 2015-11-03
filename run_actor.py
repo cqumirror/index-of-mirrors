@@ -10,7 +10,7 @@ from actor import app
 from flask import request, redirect
 
 
-# Handle static files for debug
+# handle static files for debug
 @app.before_request
 def add_static():
     if not app.debug:
@@ -21,7 +21,7 @@ def add_static():
 
 
 def main():
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="127.0.0.1", debug=True)
 
 
 if __name__ == '__main__':
