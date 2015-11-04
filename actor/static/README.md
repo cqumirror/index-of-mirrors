@@ -21,7 +21,7 @@ Chongqing University Open Source Mirror Site
 
 ##源列表
 - Name (镜像帮助,新增镜像标记)
-- Last update (yyyy-MM-dd HH:mm:ss, Ex. 2015-02-16 01:58:00)
+- Last sync (yyyy-MM-dd HH:mm:ss, Ex. 2015-02-16 01:58:00)
 - Status (Success | Unknown | Syncing)
 
 ##关于此镜像站

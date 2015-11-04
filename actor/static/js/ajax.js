@@ -66,7 +66,7 @@ function showSourceList(resData) {
         // update the row's info
         $('.' + data[i].name).children('.name').children('a').html(data[i].name);
         $('.' + data[i].name).children('.name').children('a').attr('href', data[i].url);
-        $('.' + data[i].name).children('.last-update').append(data[i].last_update);
+        $('.' + data[i].name).children('.last-update').append(data[i].last_sync);
         
         // update status
         if (data[i].status == 100) $('.' + data[i].name).children('.statu').html(syclingLabel);
@@ -118,7 +118,7 @@ function updateStatus(resData) {
         var unknownLabel = $('<span class="label label-statu label-default"></span>');
         var syclingLabel = $('<span class="label label-statu label-info">Syncing</span>');
         // update last update
-        $('.' + data[i].name).children('.last-update').html(data[i].last_update);
+        $('.' + data[i].name).children('.last-update').html(data[i].last_sync);
         // update statu
         if (data[i].status == 100) $('.' + data[i].name).children('.statu').html(syclingLabel);
         else if (data[i].status == 200) $('.' + data[i].name).children('.statu').html(successLabel);
