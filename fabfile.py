@@ -28,8 +28,8 @@ def prepare():
 
 def put_config_files():
     # update gunicorn's config
-    put("server/gunicorn.py", target_dir)
-    put("server/settings.cfg", target_dir)
+    put("production_confs/gunicorn.py", target_dir)
+    put("production_confs/settings.cfg", target_dir)
 
 
 def deploy():
@@ -58,8 +58,7 @@ def start():
         actor_pid_file = "gunicorn-actor.pid"
         # kill old processes gracefully if actor running
         if exists(actor_pid_file):
-            run("export ACTOR_SETTINGS=/srv/actor/settings.cfg && "
-                "kill -TERM $(<{})".format(actor_pid_file))
+            run("kill -TERM $(<{})".format(actor_pid_file))
         # start new gunicorn processes
         run("export ACTOR_SETTINGS=/srv/actor/settings.cfg && "
             ".pyenv/bin/gunicorn -c gunicorn.py actor:app -D")
