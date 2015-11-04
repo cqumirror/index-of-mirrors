@@ -75,6 +75,10 @@ class MirrorsResources(db.Model):
 
 
 class MirrorsNotices(db.Model):
+    __table_args__ = {
+        "mysql_charset": "utf8"
+    }
+
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     level = db.Column(db.String(20), nullable=False)
