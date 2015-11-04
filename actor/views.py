@@ -1,11 +1,13 @@
 # coding=utf-8
 
+import hmac
 import logging
 import os.path
 
 from actor import app
+from hashlib import sha1
 from datetime import datetime
-from flask import jsonify
+from flask import jsonify, request, abort
 from domains import db, MirrorsInfo, MirrorsResources, MirrorsNotices
 
 time_old_format = "%Y%m%d %H:%M:%S"
@@ -253,6 +255,31 @@ def get_mirrors_osses():
         res["targets"].append(oss_f)
     res["count"] = len(res["targets"])
     return jsonify(res)
+
+
+def check_headers(headers):
+    if headers["X-Github-Event"] != "issuse":
+        return False
+
+    return True
+
+
+@app.route("/api/mirrors/issue", methods=["POST"])
+def post_mirrors_issue():
+    github_signature = request.headers["X-Hub-Signature"]
+    github_delivery_id = request.headers["X-Github-Delivery"]
+
+    # check request body with hook secret
+    signature = hmac.new(app.config["GITHUB_HOOK_SECRET"], request.data, sha1).hexdigest()
+    signature_f = ''.join(["sha1=", signature])
+    if signature_f != github_signature:
+        abort(403)
+
+    if not check_headers(request.headers):
+        abort(403)
+
+    payload = request.get_json()
+    return "ok"
 
 
 @app.after_request

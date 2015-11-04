@@ -36,11 +36,14 @@ CREATE TABLE `mirrors_info` (
   `fullname` varchar(60) NOT NULL,
   `host` varchar(60) NOT NULL,
   `path` varchar(100) NOT NULL,
+  `protocol` varchar(10) NOT NULL,
   `help` varchar(100) DEFAULT NULL,
   `comment` varchar(10) DEFAULT NULL,
-  `protocol` varchar(10) NOT NULL,
+  `status` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name_index` (`name`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -50,8 +53,36 @@ CREATE TABLE `mirrors_info` (
 
 LOCK TABLES `mirrors_info` WRITE;
 /*!40000 ALTER TABLE `mirrors_info` DISABLE KEYS */;
-INSERT INTO `mirrors_info` VALUES (1,'archlinux','Arch Linux','b.mirrors.lanunion.org','/archlinux','/wiki/index.php?title=ArchLinux',NULL,'https'),(2,'archlinux-cn','Arch Linux CN','b.mirrors.lanunion.org','/archlinux-cn','/wiki/index.php?title=ArchLinux-cn',NULL,'https'),(3,'archlinux-arm','Arch Linux ARM','b.mirrors.lanunion.org','/archlinux-arm','/wiki/index.php?title=ArchLinux-arm',NULL,'https'),(4,'centos','CentOS','b.mirrors.lanunion.org','/centos','/wiki/index.php?title=CentOS',NULL,'https'),(5,'debian','Debian','b.mirrors.lanunion.org','/debian',NULL,NULL,'https'),(6,'debian-backports','Debian backports','b.mirrors.lanunion.org','/debian-backports',NULL,NULL,'https'),(7,'debian-cd','Debian CD','b.mirrors.lanunion.org','/debian-cd',NULL,NULL,'https'),(8,'debian-multimedia','Debian multimedia','b.mirrors.lanunion.org','/debian-multimedia',NULL,NULL,'https'),(9,'debian-security','Debian security','b.mirrors.lanunion.org','/debian-security',NULL,NULL,'https'),(10,'deepin','Deepin','mirrors.cqu.edu.cn','/deepin','/wiki/index.php?title=Deepin',NULL,'https'),(11,'deepin-cd','Deepin CD','mirrors.cqu.edu.cn','/deepin-cd',NULL,NULL,'https'),(12,'epel','EPEL','b.mirrors.lanunion.org','/epel',NULL,NULL,'https'),(13,'ezgo','Ezgo','mirrors.cqu.edu.cn','/ezgo',NULL,NULL,'https'),(14,'linuxmint','Linux Mint','b.mirrors.lanunion.org','/linuxmint','/wiki/index.php?title=Linuxmint',NULL,'https'),(15,'opensuse','OpenSUSE','c.mirrors.lanunion.org','/opensuse',NULL,NULL,'https'),(16,'pypi','PyPI','pypi.mirrors.lanunion.org','/','/wiki/index.php?title=PyPI',NULL,'https'),(17,'raspbian','Raspbian','mirrors.cqu.edu.cn','/raspbian','/wiki/index.php?title=Raspbian',NULL,'https'),(18,'startos','StartOS','mirrors.cqu.edu.cn','/startos','/wiki/index.php?title=StartOS',NULL,'https'),(19,'ubuntu','Ubuntu','mirrors.cqu.edu.cn','/ubuntu','/wiki/index.php?title=Ubuntu',NULL,'https'),(20,'ubuntu-releases','Ubuntu releases','mirrors.cqu.edu.cn','/ubuntu-releases',NULL,NULL,'https'),(21,'cpan','CPAN','b.mirrors.lanunion.org','/cpan',NULL,NULL,'https'),(22,'ubuntu-kylin-releases','Ubuntu Kylin releases','mirrors.cqu.edu.cn','/ubuntu-kylin-releases',NULL,NULL,'https'),(23,'kali','Kali','b.mirrors.lanunion.org','/kali',NULL,'new','https'),(24,'kali-security','Kali security','b.mirrors.lanunion.org','/kali-security',NULL,'new','https'),(25,'mariadb','Mariadb','c.mirrors.lanunion.org','/mariadb',NULL,NULL,'https');
+INSERT INTO `mirrors_info` VALUES (1,'arch-linux','Arch Linux','b.mirrors.lanunion.org','/archlinux','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=ArchLinux',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(2,'arch-linux-arm','Arch Linux ARM','b.mirrors.lanunion.org','/archlinux-arm','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=ArchLinux-arm',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(3,'arch-linux-cn','Arch Linux CN','b.mirrors.lanunion.org','/archlinux-cn','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=ArchLinux-cn',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(4,'centos','CentOS','b.mirrors.lanunion.org','/centos','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=CentOS',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(5,'cpan','CPAN','b.mirrors.lanunion.org','/cpan','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(6,'debian','Debian','b.mirrors.lanunion.org','/debian','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(7,'debian-backports','Debian backports','b.mirrors.lanunion.org','/debian-backports','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(8,'debian-cd','Debian CD','b.mirrors.lanunion.org','/debian-cd','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(9,'debian-multimedia','Debian multimedia','b.mirrors.lanunion.org','/debian-multimedia','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(10,'debian-security','Debian security','b.mirrors.lanunion.org','/debian-security','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(11,'deepin','Deepin','mirrors.cqu.edu.cn','/deepin','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=Deepin',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(12,'deepin-cd','Deepin CD','mirrors.cqu.edu.cn','/deepin-cd','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(13,'epel','EPEL','b.mirrors.lanunion.org','/epel','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(14,'ezgo','Ezgo','mirrors.cqu.edu.cn','/ezgo','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(15,'kali','Kali','b.mirrors.lanunion.org','/kali','https',NULL,'new',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(16,'kali-security','Kali security','b.mirrors.lanunion.org','/kali-security','https',NULL,'new',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(17,'linux-mint','Linux Mint','b.mirrors.lanunion.org','/linuxmint','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=Linuxmint',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(18,'mariadb','Mariadb','c.mirrors.lanunion.org','/mariadb','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(19,'opensuse','OpenSUSE','c.mirrors.lanunion.org','/opensuse','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(20,'pypi','PyPI','pypi.mirrors.lanunion.org','/','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=PyPI',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(21,'raspbian','Raspbian','mirrors.cqu.edu.cn','/raspbian','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=Raspbian',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(22,'startos','StartOS','mirrors.cqu.edu.cn','/startos','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=StartOS',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(23,'ubuntu','Ubuntu','mirrors.cqu.edu.cn','/ubuntu','https','https://mirrors.cqu.edu.cn/wiki/index.php?title=Ubuntu',NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(24,'ubuntu-kylin-releases','Ubuntu Kylin releases','mirrors.cqu.edu.cn','/ubuntu-kylin-releases','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(25,'ubuntu-releases','Ubuntu releases','mirrors.cqu.edu.cn','/ubuntu-releases','https',NULL,NULL,0,'2015-11-04 18:11:35','2015-11-04 18:11:35');
 /*!40000 ALTER TABLE `mirrors_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mirrors_notices`
+--
+
+DROP TABLE IF EXISTS `mirrors_notices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mirrors_notices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text NOT NULL,
+  `level` varchar(20) NOT NULL,
+  `status` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mirrors_notices`
+--
+
+LOCK TABLES `mirrors_notices` WRITE;
+/*!40000 ALTER TABLE `mirrors_notices` DISABLE KEYS */;
+INSERT INTO `mirrors_notices` VALUES (1,'There is a big progress.','normal',0,'2015-11-04 19:17:31','2015-11-04 19:17:35');
+/*!40000 ALTER TABLE `mirrors_notices` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -72,6 +103,9 @@ CREATE TABLE `mirrors_resources` (
   `version` varchar(40) NOT NULL,
   `comment` varchar(10) DEFAULT NULL,
   `protocol` varchar(10) NOT NULL,
+  `status` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -82,35 +116,8 @@ CREATE TABLE `mirrors_resources` (
 
 LOCK TABLES `mirrors_resources` WRITE;
 /*!40000 ALTER TABLE `mirrors_resources` DISABLE KEYS */;
-INSERT INTO `mirrors_resources` VALUES (1,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-desktop-amd64.iso','os','14.04.3-amd64',NULL,'https'),(2,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-desktop-i386.iso','os','14.04.3-i386',NULL,'https'),(3,'ubuntu-server','Ubuntu Server','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-server-amd64.iso','os','14.04.3-amd64',NULL,'https'),(4,'ubuntu-server','Ubuntu Server','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-server-i386.iso','os','14.04.3-i386',NULL,'https'),(5,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.10/ubuntu-14.10-desktop-amd64.iso','os','14.10-amd64',NULL,'https'),(6,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.10/ubuntu-14.10-desktop-i386.iso','os','14.10-i386',NULL,'https'),(7,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/15.04/ubuntu-15.04-desktop-amd64.iso','os','15.04-amd64',NULL,'https'),(8,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/15.04/ubuntu-15.04-desktop-i386.iso','os','15.04-i386',NULL,'https'),(9,'centos','CentOS','b.mirrors.lanunion.org','/CentOS','/CentOS/7.1.1503/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso','os','7.1.1503-x86_64-Minimal',NULL,'https');
+INSERT INTO `mirrors_resources` VALUES (1,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-desktop-amd64.iso','os','14.04.3-amd64',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(2,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-desktop-i386.iso','os','14.04.3-i386',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(3,'ubuntu-server','Ubuntu Server','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-server-amd64.iso','os','14.04.3-amd64',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(4,'ubuntu-server','Ubuntu Server','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.04.3/ubuntu-14.04.3-server-i386.iso','os','14.04.3-i386',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(5,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.10/ubuntu-14.10-desktop-amd64.iso','os','14.10-amd64',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(6,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/14.10/ubuntu-14.10-desktop-i386.iso','os','14.10-i386',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(7,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/15.04/ubuntu-15.04-desktop-amd64.iso','os','15.04-amd64',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(8,'ubuntu-desktop','Ubuntu Desktop','mirrors.cqu.edu.cn','/ubuntu-releases','/ubuntu-releases/15.04/ubuntu-15.04-desktop-i386.iso','os','15.04-i386',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35'),(9,'centos','CentOS','b.mirrors.lanunion.org','/CentOS','/CentOS/7.1.1503/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso','os','7.1.1503-x86_64-Minimal',NULL,'https',0,'2015-11-04 18:11:35','2015-11-04 18:11:35');
 /*!40000 ALTER TABLE `mirrors_resources` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(80) DEFAULT NULL,
-  `email` varchar(120) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'reimondo','reimondo@r.org');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -122,4 +129,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-04  1:40:26
+-- Dump completed on 2015-11-04  9:25:55
