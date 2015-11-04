@@ -258,10 +258,35 @@ def get_mirrors_osses():
 
 
 def check_headers(headers):
-    if headers["X-Github-Event"] != "issuse":
+    if headers["X-Github-Event"] != "issues":
         return False
 
     return True
+
+
+def add_mirror(body):
+    pass
+
+
+def add_resource(body):
+    pass
+
+
+def add_notice(body):
+    notice = MirrorsNotices(content=body)
+    db.session.add(notice)
+    db.session.commit()
+
+
+def dispatch(label_name, body):
+    if label_name == "mirror":
+        add_mirror(body)
+
+    if label_name == "resource":
+        add_resource(body)
+
+    if label_name == "notice":
+        add_notice(body)
 
 
 @app.route("/api/mirrors/issue", methods=["POST"])
@@ -275,10 +300,18 @@ def post_mirrors_issue():
     if signature_f != github_signature:
         abort(403)
 
+    # fot test only
+    if request.headers["X-Github-Event"] == "ping":
+        return "pang"
+
     if not check_headers(request.headers):
         abort(403)
 
-    payload = request.get_json()
+    issue_payload = request.get_json()
+
+    if issue_payload["action"] == "labeled":
+        dispatch(issue_payload["label"]["name"], issue_payload["issue"]["body"])
+
     return "ok"
 
 
