@@ -6,7 +6,11 @@ import os.path
 from actor import app
 from datetime import datetime
 from flask import jsonify
-from domains import db, MirrorsInfo, MirrorsResources
+from domains import db, MirrorsInfo, MirrorsResources, MirrorsNotices
+
+time_old_format = "%Y%m%d %H:%M:%S"
+time_new_format = "%Y-%m-%d %H:%M:%S"
+time_unknown = "????-??-?? ??:??:??"
 
 
 # create log file
@@ -32,7 +36,7 @@ app.logger.addHandler(error_log_file_handler())
 @app.route("/api/mirrors/list")
 def get_mirrors_list():
     """Return a list of all the mirrors."""
-    mirrors = MirrorsInfo.query.order_by(MirrorsInfo.name)
+    mirrors = MirrorsInfo.query.filter_by(status=0).order_by(MirrorsInfo.name)
     res = dict(count=0, targets=[])
     for mirror in mirrors:
         mirror_help = mirror.help if mirror.help is not None else ''
@@ -43,12 +47,12 @@ def get_mirrors_list():
             url=''.join([mirror.protocol, "://", mirror.host, mirror.path]),
             help=mirror_help,
             comment=mirror_comment,
-            last_update="????-??-?? ??:??:??",
+            last_sync=time_unknown,
             size="unknown",
             status=500,
             message=''
         )
-        # update last_update, size, status, message from sync log
+        # update last_sync, size, status, message from sync log
         prepare_mirrors_status(target)
         res["targets"].append(target)
     res["count"] = len(res["targets"])
@@ -89,7 +93,7 @@ def format_size(size):
 
 
 def prepare_mirrors_status(target):
-    """Update mirrors' last_update, size, status, message property."""
+    """Update mirrors' last_sync, size, status, message property."""
     mirror_log = '.'.join([target["name"], "log"])
     mirror_log_path = os.path.join(app.config["SYNC_LOG_DIR"], mirror_log)
     try:
@@ -103,12 +107,9 @@ def prepare_mirrors_status(target):
             second_last_values = lines[-2].rstrip().split(" - ")
             stage = last_line_values[2]
 
-            time_old_format = "%Y%m%d %H:%M:%S"
-            time_new_format = "%Y-%m-%d %H:%M:%S"
-
             if stage == "SyncCompt":
                 time = ' '.join([last_line_values[0], last_line_values[1]])
-                target["last_update"] = datetime.strptime(time, time_old_format).strftime(time_new_format)
+                target["last_sync"] = datetime.strptime(time, time_old_format).strftime(time_new_format)
                 target["size"] = ''.join([str(format_size(int(last_line_values[3]))), 'G'])   # KB to GB
                 if second_last_values[-2] == "SyncError":
                     error_code = second_last_values[3]
@@ -122,7 +123,7 @@ def prepare_mirrors_status(target):
 
             if stage == "SyncStart":
                 time = ' '.join([second_last_values[0], second_last_values[1]])
-                target["last_update"] = datetime.strptime(time, time_old_format).strftime(time_new_format)
+                target["last_sync"] = datetime.strptime(time, time_old_format).strftime(time_new_format)
                 target["size"] = ''.join([str(format_size(int(last_line_values[3]))), 'G'])   # KB to GB
                 target["message"] = ''
                 target["status"] = 100
@@ -136,13 +137,13 @@ def prepare_mirrors_status(target):
 
 @app.route("/api/mirrors/status")
 def get_mirrors_status():
-    mirrors = MirrorsInfo.query.all()
+    mirrors = MirrorsInfo.query.filter_by(status=0).all()
     res = dict(count=0, targets=[])
     for mirror in mirrors:
         # Only name in row
         target = dict(
             name=mirror.name,
-            last_update="????-??-?? ??:??:??",
+            last_sync=time_unknown,
             size="unknown",
             status=500,
             message=''
@@ -155,12 +156,21 @@ def get_mirrors_status():
 
 @app.route("/api/mirrors/notices")
 def get_mirrors_notices():
-    res = {
-        "count": 3,
-        "targets": [{"created_at": "2015-08-21 01:02:00", "notice": "这是第一条公告: 你好,地球"},
-                    {"created_at": "2015-08-21 11:02:00", "notice": "这是第二条公告: doing..."},
-                    {"created_at": "2015-10-27 11:02:00", "notice": "这是第三条公告: deploy successfully"}]
-    }
+    """Show the last notices."""
+    res = dict(count=0, targets=[])
+
+    # query all the actived notices
+    notices = MirrorsNotices.query.filter_by(status=0)\
+        .order_by(MirrorsNotices.created.desc())
+    for notice in notices:
+        time_created_f = notice.created.strftime(time_new_format)
+        notice_f = dict(
+            created_at=time_created_f,
+            notice=notice.content,
+            level=notice.level
+        )
+        res["targets"].append(notice_f)
+    res["count"] = len(res["targets"])
     return jsonify(res)
 
 
@@ -178,12 +188,15 @@ def format_version(version):
 def get_mirrors_oses():
     res = dict(count=0, targets=[])
     # query all the oses
-    query = db.session.query(MirrorsResources.name).distinct().filter(MirrorsResources.type == "os")
+    query = db.session.query(MirrorsResources.name)\
+        .distinct().filter(MirrorsResources.type == "os",
+                           MirrorsResources.status == 0)
     os_names = [row.name for row in query.all()]
 
     for os_name in os_names:
         # fetch all versions of the os
-        os_versions = MirrorsResources.query.filter_by(type="os", name=os_name).all()
+        os_versions = MirrorsResources.query.\
+            filter_by(type="os", name=os_name, status=0).all()
 
         # prepare the os object
         o_s_f = dict(name=os_name, fullname='', type="os", url='', versions=[], count=0)
@@ -208,7 +221,38 @@ def get_mirrors_oses():
 
 @app.route("/api/mirrors/osses")
 def get_mirrors_osses():
-    return jsonify(dict(count=0, targets=[]))
+    """Retrun list of some Open Source Softwares."""
+    res = dict(count=0, targets=[])
+    # query all the osses
+    query = db.session.query(MirrorsResources.name).\
+        distinct().filter(MirrorsResources.type == "oss",
+                          MirrorsResources.status == 0)
+    oss_names = [row.name for row in query.all()]
+
+    for oss_name in oss_names:
+        # fetch all versions of the oss
+        oss_versions = MirrorsResources.query.\
+            filter_by(type="oss", name=oss_name, status=0).all()
+
+        # prepare the oss object
+        oss_f = dict(name=oss_name, fullname='', type="oss", url='', versions=[], count=0)
+
+        for (idx, oss) in enumerate(oss_versions):
+            # init the oss object
+            if idx == 0:
+                oss_f["fullname"] = oss.fullname
+                oss_f["url"] = ''.join([oss.protocol, "://", oss.host, oss.dir])
+
+            # add new version of the oss
+            oss_version_f = format_version(oss.version)
+            oss_version_url = ''.join([oss.protocol, "://", oss.host, oss.path])
+            version = dict(version=oss_version_f, url=oss_version_url)
+            oss_f["versions"].append(version)
+        # update count of the os's version object
+        oss_f["count"] = len(oss_f["versions"])
+        res["targets"].append(oss_f)
+    res["count"] = len(res["targets"])
+    return jsonify(res)
 
 
 @app.after_request

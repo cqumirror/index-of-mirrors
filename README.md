@@ -36,7 +36,7 @@ GET    /api/mirrors/list
     "url": "http://b.mirrors.lanunion.org/archlinux",
     "help": "http://mirrors.cqu.edu.cn/wiki?page=archlinux",
     "comment": "",
-    "last_update": "2015-08-11 12:40:00",
+    "last_sync": "2015-08-11 12:40:00",
     "size": "120G",
     "status": 200,
     "message": ""
@@ -52,7 +52,7 @@ GET    /api/mirrors/list
 |url|镜像链接|现需完整 url|
 |help|镜像使用帮助链接|现链接到相应 wiki 页|
 |comment|镜像备注|新镜像标注 new, 没有则为空|
-|last_update|最后更新时间||
+|last_sync|最后同步时间||
 |size|镜像大小||
 |status|镜像更新状态|具体代码含义参加下表|
 |message|根据 status 给出相应信息, 没有则为空||
@@ -79,7 +79,7 @@ GET    /api/mirrors/status
 ```
 {
     "name": "archlinux",
-    "last_update": "2015-08-21 12:42:20",
+    "last_sync": "2015-08-21 12:42:20",
     "size": "120G",
     "status": 100,
     "message": ""
@@ -95,7 +95,8 @@ GET    /api/mirrors/notices
 ```
 {
     "created_at": "2015-08-21 01:02:00",
-    "notice": "镜像站添了点东西"
+    "notice": "镜像站添了点东西",
+    "level": "normal"
 }
 ```
 
