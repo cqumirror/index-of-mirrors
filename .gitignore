@@ -13,3 +13,7 @@ env/
 
 # others
 *.log
+
+# private
+settings.cfg
+production_confs/
