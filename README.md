@@ -11,7 +11,7 @@ A new back-end and new web pages of CQU Mirror Site.
 - [x] Have better compatibility. Mobile support.
 
 ###Back End
-- [x] Provide RESTful APIs for front-end to operate resources.
+- [x] Provide RESTful API for front-end to operate resources.
 - [ ] Publish notices or news via github issue.
 - [ ] Update mirrors, resources list via github issue.
 - [ ] Auto backup database: dump database into json files and push to github with some rules, such as backup after each successful issue submit.
@@ -30,7 +30,7 @@ It's free to try your ideas.
 - Create a database and restore it with `schema.sql`. We use `MariaDB` in production.
 - Custom a `settings.cfg` with a copy of `example_settings.cfg`.
 - Run the APP with the command `./run_actor.py` or `.pyenv/bin/python run_actor.py`.
-- To know details of APIs, see [here](docs/mirror-site-api.md).
+- To know details of API, see [here](docs/mirror-site-api.md).
 - To know details of web pages' description, see
  - [index](docs/mirror-site-web-pages-index.md)
 

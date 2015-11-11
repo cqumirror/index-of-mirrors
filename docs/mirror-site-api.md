@@ -1,5 +1,7 @@
-Mirror Site APIs
+API
 ===
+
+##Schema
 1. 数据返回格式统一使用 `json`
 2. HTTP Method: `GET`
 3. 时间格式: yyyy-MM-dd HH:mm:ss
@@ -21,7 +23,7 @@ Mirror Site APIs
 |targets|对象列表||
 
 
-####获取镜像列表
+##获取镜像列表
 ```
 GET    /api/mirrors/list
 ```
@@ -67,7 +69,7 @@ GET    /api/mirrors/list
 
 
 
-####获取镜像更新状态
+##获取镜像更新状态
 用于前端轮询来刷新镜像列表中镜像更新状态
 ```
 GET    /api/mirrors/status
@@ -84,7 +86,7 @@ GET    /api/mirrors/status
 }
 ```
 
-####获取镜像站公告
+##获取镜像站公告
 ```
 GET    /api/mirrors/notices
 ```
@@ -98,7 +100,7 @@ GET    /api/mirrors/notices
 }
 ```
 
-####获取快速获取中的操作系统列表
+##获取快速获取中的操作系统列表
 ```
 GET    /api/mirrors/oses
 ```
@@ -117,7 +119,7 @@ GET    /api/mirrors/oses
 }
 ```
 
-####获取快速获取中的软件列表
+##获取快速获取中的软件列表
 ```
 GET    /api/mirrors/osses
 ```
