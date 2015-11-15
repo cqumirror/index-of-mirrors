@@ -21,7 +21,7 @@ A new back-end and new web pages of CQU Mirror Site.
  - `domains.py`: Some data objects.
  - `views.py`: Routers and its implementation.
  - `static/`: Web pages are here!
- - `run_actor.py`: For debugging. Just `./run_actor.py` in the CLI.
+- `run_actor.py`: For debugging. Just `./run_actor.py` in the CLI.
 
 ##Quick Start for Dev.
 It's free to try your ideas.
