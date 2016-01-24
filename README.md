@@ -1,4 +1,4 @@
-Index of Mirror Site
+Index of Mirrors
 ===
 Focus on improving mirrors' index.
 

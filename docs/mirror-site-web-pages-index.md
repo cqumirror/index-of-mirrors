@@ -1,31 +1,25 @@
-Description of Index Page
-===
+#index
 
-##Link
-- CQU Mirrors
+##Nav Bar
+- Mirrors
 - Flow
+- Download
 - Wiki
 - Blog
 
 
 ##Title
-重庆大学开源镜像站
-Chongqing University Open Source Mirror Site
+重庆大学开源镜像
+Chongqing University Open Source Mirrors
 
 
 ##公告
 1. 世界，你好！
 
 
-##快速获取
-这里为您提供各大主流 Linux 发行版本的安装镜像以及常用的免费软件,请根据您的需求进行选择:
-- 发行版名称
-- 发行版版本
-
-
 ##源列表
-- Name (镜像帮助,新增镜像标记)
-- Last sync (yyyy-MM-dd HH:mm:ss, Ex. 2015-02-16 01:58:00)
+- Name (Help Link, [Highlight Mark])
+- Last Sync (yyyy-MM-dd HH:mm:ss, Ex. 2015-02-16 01:58:00)
 - Status (Success | Unknown | Syncing)
 
 
@@ -40,10 +34,10 @@ Chongqing University Open Source Mirror Site
 
 ##Footer
 ###Contact Us
-- [Mailing](mirrors#cqu.edu.cn)
-- [Github](https://github.com/cquos)
-- [Issue report](http://mirrors.cqu.edu.cn/webin/report.php)
+- [Mailing list](cqumirrors#googlegroups.com)
+- [Github](https://github.com/cqumirrors)
+- [Issue report](https://mirrors.cqu.edu.cn/webin/report.php)
 
 ###Others
-Copyleft 2015-2016 重庆大学开源镜像站
+Copyleft 2015-2016 Lanunion Maintenance Team && Continue Tech. Group
 
