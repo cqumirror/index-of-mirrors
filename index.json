@@ -1,21 +1,245 @@
 {
-    "mirrorlist": {
-        "count": 1,
-        "targets": [{
-            "cname": "centos",
-            "url": "https://mirrors.cqu.edu.cn/centos",
-            "synced_at": "0000-00-00 00:00:00",
-            "status":  300,
-            "has_comment": true,
-            "comment": "new",
-            "has_help": true,
-            "help_url": "https://mirrors.cqu.edu.cn/wiki/centos/"
-        }]
-    },
     "notice": {
-        "count": 1,
-        "targets": [{
-            "notice": "Hello world!"
-        }]
+        "count": 1, 
+        "targets": [
+            {
+                "notice": "Hello world!"
+            }
+        ]
+    }, 
+    "mirrorlist": {
+        "count": 23, 
+        "targets": [
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/archlinux-cn", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "archlinux-cn", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/archlinux-cn"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/archlinux-arm", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "archlinux-arm", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/archlinux-arm"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/archlinux", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "archlinux", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/archlinux"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/centos", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "centos", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/centos"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/cpan", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "cpan", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/cpan"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/ctan", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "ctan", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/ctan"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/cygwin", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "cygwin", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/cygwin"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/debian", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "debian", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/debian"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/debian-backports", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "debian-backports", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/debian-backports"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/debian-cd", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "debian-cd", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/debian-cd"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/debian-multimedia", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "debian-multimedia", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/debian-multimedia"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/debian-security", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "debian-security", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/debian-security"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/deepin", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "deepin", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/deepin"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/deepin-cd", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "deepin-cd", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/deepin-cd"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/epel", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "epel", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/epel"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/ezgo", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "ezgo", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/ezgo"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/kali", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "kali", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/kali"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/kali-security", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "kali-security", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/kali-security"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/kernel", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "kernel", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/kernel"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/linuxmint", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "linuxmint", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/linuxmint"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/raspbian", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "raspbian", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/raspbian"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/ubuntu", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "ubuntu", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/ubuntu"
+            }, 
+            {
+                "comment": "new", 
+                "has_comment": true, 
+                "has_help": true, 
+                "url": "https://mirrors.cqu.edu.cn/ubuntu-releases", 
+                "synced_at": "0000-00-00 00:00:00", 
+                "cname": "ubuntu-releases", 
+                "status": 500, 
+                "help_url": "https://mirrors.cqu.edu.cn/wiki/ubuntu-releases"
+            }
+        ]
     }
 }
